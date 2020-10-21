@@ -1,0 +1,76 @@
+---
+title: "Homework 8"
+author: "Chris Gahagan"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# the code below controls the default settings for each chunk
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      fig.align = "center", 
+                      fig.height=3, 
+                      fig.width=5)
+
+# load packages here, so they don't show up in and clutter the document
+library(tidyverse)
+library(haven)
+library(kableExtra)
+```
+
+
+# Exercise 1.1
+
+For this exercise, I was careful to **style** my *text* so that it was easy to read.
+
+Where possible, I...
+
+1. answered with
+1. numbered lists.
+
+Where appropriate, I...
+
+- answered with
+- bulleted lists. 
+
+I formatted my `inline code` correctly and I used
+
+# Headers, 
+
+## Subheaders, and 
+
+### Subsubheaders 
+
+to organize my work.
+
+I even used LaTeX equations, like $y = mx + b$, where needed.
+
+I quoted authorities on the topic:
+
+> "Always scatterplot your data."  ---Carlisle Rainey
+
+**Most importantly**, I used R code chunks to include code, output, and figures in the document without copy-and-pasting.
+
+```{r, fig.height=2.5, fig.width=4}
+parties <- read_rds("data/parties.rds")
+
+ggplot(parties, aes(x = eneg, y = enep)) + 
+  geom_point()
+```
+
+Notice how I overrode the `fig.height` and the `fig.width` I set as the default in the initial code chunk above. Here's a bit more discussion about Exercise 1.1. 
+
+
+## Exercise 2.3
+
+Here's another exercise...
+
+```{r}
+parties <- read_rds("data/parties.rds")
+
+glimpse(parties)
+```
+
+
