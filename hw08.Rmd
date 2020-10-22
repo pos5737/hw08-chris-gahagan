@@ -1,0 +1,121 @@
+---
+title: "Homework 8"
+author: "Chris Gahagan"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# the code below controls the default settings for each chunk
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      fig.align = "center", 
+                      fig.height=3, 
+                      fig.width=5)
+knitr::opts_knit$set("root.dir")
+
+# load packages here, so they don't show up in and clutter the document
+library(tidyverse)
+library(haven)
+library(kableExtra)
+library(ggplot2)
+library(ggrepel)
+```
+
+# Chapter 8 Scatter Plots
+## Exercise 8.1
+### Clark and Golder Script
+```{r fig.height=3, fig.width=5}
+parties<- read_rds("data/parties.rds") 
+ggplot(parties, aes(x = eneg, y = enep)) + 
+  geom_point()+
+  facet_wrap(vars(electoral_system))
+```
+
+## Exercise 8.2
+### Uninsured voters ACA favorability by Governor's Position and Poverty Level
+```{r fig.height=3, fig.width=5}
+politics<-read.csv("data/politics_and_need.csv")
+ggplot(politics, aes(x = percent_uninsured, y = percent_favorable_aca, color = percent_poverty)) + 
+  geom_point()+
+facet_wrap(vars(gov_position))
+```
+
+## Exercise 8.3
+### 8.3.1 Geom_text() plot
+```{r fig.height=3, fig.width=5}
+ggplot(politics, aes(x = percent_uninsured, y = percent_favorable_aca, label = state_abbr)) + 
+  geom_text(alpha = .5)+
+  facet_wrap(vars(gov_position))
+```
+
+### 8.3.2 Geom_label() plot
+```{r fig.height=3, fig.width=5}
+ggplot(politics, aes(x = percent_uninsured, y = percent_favorable_aca, label = state_abbr, 
+                     color = state)) + 
+  theme(legend.position = "none")+
+  geom_label(alpha = .1)+
+  facet_wrap(vars(gov_position))
+```
+### 8.3.3 Geom_text_repel() plot
+```{r fig.height=3, fig.width=5}
+ggplot(politics, aes(x = percent_uninsured, y = percent_favorable_aca, label = state_abbr,
+                     color = state)) + 
+  theme(legend.position = "none")+
+  geom_point(alpha = .1)+
+  geom_text_repel()+
+  facet_wrap(vars(gov_position))
+```
+### 8.3.4 Geom_label_repel() plot
+```{r fig.height=3, fig.width=5}
+ggplot(politics, aes(x = percent_uninsured, y = percent_favorable_aca, label = state_abbr, 
+                     color = state)) + 
+  theme(legend.position = "none")+
+  geom_point(alpha = .1)+
+  geom_label_repel()+
+  facet_wrap(vars(gov_position))
+```
+
+# Chapter 9 Correlation Coefficient
+## Exercise 9.4 Gamson Correlation Data and Plot
+```{r fig.height=3, fig.width=5}
+gamson<-read_rds("data/gamson.rds") #loading gamson
+glimpse(gamson)
+
+cor_df<-gamson%>% #creating correlation data
+  summarise(cor = cor(seat_share, portfolio_share))
+glimpse(cor_df)
+
+ggplot(gamson, aes(x = seat_share, y = portfolio_share)) + 
+  geom_point(alpha = .5)+
+geom_label(data = cor_df, aes(x = Inf, y = Inf, label = paste0("cor = ", round(cor, 2))),
+           hjust = 1.1, vjust = 1.1)+
+  theme_bw() #plotting correlation data
+```
+
+## Exercise 9.5
+### 9.5.1 
+
+```{r}
+devtools::install_github("pos5737/pos5737data")
+data(anscombe, package = "pos5737data")
+
+smry_ans <- anscombe %>%
+group_by(dataset) %>%
+summarize(cor = cor(x = x, 
+                      y = y))%>%
+glimpse()
+```
+1. **All four sets have almost identical correlation**
+1. **The data sets each suggest a strong relationship between x and y**
+
+### 9.5.2 Plots of anscombe
+```{r fig.height=3, fig.width=5}
+ggplot(anscombe, aes(x = x, y = y)) + 
+  geom_point() + 
+  facet_wrap(vars(dataset))
+```
+1. **All the plots are completely different from one another.**
+1. **For the amount of data, there seems to be a positive relationship between X and Y, except for in Panel IV, and Panel II the data looks like it is starting to turn negative.**
+1. **No, just the correlation coefficient alone did not offer a good summary at all comparably.**
